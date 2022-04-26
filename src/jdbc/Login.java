@@ -2,6 +2,7 @@ package jdbc;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class Login extends JFrame {
     JLabel lUserL = new JLabel("Username");
@@ -38,24 +39,27 @@ public class Login extends JFrame {
         tfUserL.setBounds(200,25,120,25);
         tfPassL.setBounds(200,50,120,25);
 
-        btnLoginL.setBounds(220,125,103,25);
-        btnRegisterL.setBounds(74,80,249,25);
+        btnLoginL.setBounds(74,80,249,25);
+        btnRegisterL.setBounds(220,125,103,25);
 
         btnLoginL.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                Koneksi con = new Koneksi();
-                String user = tfUser.getText();
-                if(con.cekUsername(user) && user != "" && con.cekLogin(user ,String.valueOf(tfPass.getPassword()))){
-                    JOptionPane.showMessageDialog(null, "Login Success");
-                }else if(user.isEmpty() || String.valueOf(tfPass.getPassword()).isEmpty()){
-                    JOptionPane.showMessageDialog(null, "Field Tidak Boleh Kosong");
-                }
-                else if(!con.cekUsername(user)){
-                    JOptionPane.showMessageDialog(null, "Username Salah");
-                }
-                else{
-                    JOptionPane.showMessageDialog(null, "Password Salah");
+                Connector conn = new Connector();
+                try {
+                    String query = "SELECT * FROM users WHERE username = '" + getUsername() + "' AND password = '" + getPassword() + "'";
+                    conn.statement = conn.connect.createStatement();
+                    ResultSet resultSet = conn.statement.executeQuery(query);
+
+                    if (resultSet.next()){
+                        JOptionPane.showMessageDialog(null, "Login Berhasil");
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "Login Gagal! Silahkan Coba Lagi");
+                        tfPassL.requestFocus();
+                    }
+                } catch (SQLException e) {
+                    System.out.println("Error");
                 }
             }
         });
@@ -63,15 +67,16 @@ public class Login extends JFrame {
         btnRegisterL.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                try {
-                    Register register = new Register();
-                    System.out.println("Berhasil Terhubung Form Register!");
-                    register.setVisible(true);
-                } catch (Exception e){
-                    System.out.println(e.getMessage());
-                }
+                Register register = new Register();
             }
-
         });
+    }
+
+    public String getUsername() {
+        return tfUserL.getText();
+    }
+
+    public String getPassword() {
+        return tfPassL.getText();
     }
 }

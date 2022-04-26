@@ -2,6 +2,7 @@ package jdbc;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 
 public class Register extends JFrame {
     JLabel lUserR = new JLabel("Username");
@@ -44,30 +45,36 @@ public class Register extends JFrame {
         btnLoginR.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                try {
-                    Login login = new Login();
-                    System.out.println("Berhasil Terhubung Form Login!");
-                    login.setVisible(true);
-                } catch (Exception e){
-                    System.out.println(e.getMessage());
-                }
+                Login login = new Login();
             }
         });
 
         btnRegisterR.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                Koneksi con = new Koneksi();
-                String user = tfUserr.getText();
-                String pass = String.valueOf(tfPassr.getPassword());
-                if(!user.isEmpty() && !pass.isEmpty()){
-                    con.insertData(user, pass);
-                }
-                else if(user.isEmpty() || pass.isEmpty()){
+                Connector conn = new Connector();
+
+                if(!getUsername().isEmpty() && !getPassword().isEmpty()) {
+                    String query = "INSERT INTO users(username, password) VALUES ('" + getUsername() + "','" + getPassword() + "')";
+                    try {
+                        conn.statement = conn.connect.createStatement();
+                        conn.statement.executeUpdate(query);
+                        JOptionPane.showMessageDialog(null, "Register Berhasil! Silahkan Login");
+                    } catch(Exception e) {
+                        System.out.println("Error");
+                    }
+                } else if (getUsername().isEmpty() || getPassword().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Tidak Boleh Kosong");
                 }
             }
-
         });
+    }
+
+    public String getUsername() {
+        return tfUserR.getText();
+    }
+
+    public String getPassword() {
+        return tfPassR.getText();
     }
 }
