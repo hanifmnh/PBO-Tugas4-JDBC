@@ -8,7 +8,7 @@ Nama : Muhammad Nur Hanif
 
 NIM : 123200123
 
-Kelas : PBO IF-D
+Kelas : PBO IF-F
 
 # Catatan
 Silahkan buat tugas mengenai sistem login dan register. Kedua screen boleh terpisah boleh digabung (dipisah akan lebih baik).  Pastikan data yang sudah di daftarkan bisa digunakan untuk login dan tersimpan di database sehingga data bisa digunakan untuk login kembali saat menjalankan aplikasi lagi tanpa harus membuat akun itu lagi.
